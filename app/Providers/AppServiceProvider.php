@@ -12,17 +12,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        if (getenv('VERCEL') || getenv('NOW_REGION')) {
+        if (getenv('VERCEL') || getenv('NOW_REGION') || getenv('RENDER')) {
             $this->app->useStoragePath('/tmp/storage');
         }
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        if (env('VERCEL') || env('APP_ENV') === 'production') {
+        if (env('VERCEL') || getenv('RENDER') || env('APP_ENV') === 'production') {
             URL::forceScheme('https');
         }
     }
