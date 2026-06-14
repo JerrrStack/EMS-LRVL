@@ -22,7 +22,8 @@ class AuthController extends Controller
         if (Auth::attempt($validated)) {
             $request->session()->regenerate();
 
-            return redirect()->route('employees.index');
+            return redirect()->route('employees.index')
+                ->with('success', 'Login successful.');
         }
 
         return back()
@@ -45,7 +46,8 @@ class AuthController extends Controller
             'password' => $validated['password'],
         ]);
 
-        return redirect()->route('login');
+        return redirect()->route('login')
+            ->with('success', 'Account created successfully. Please log in.');
     }
 
     public function logout(Request $request)
@@ -55,6 +57,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login');
+        return redirect()->route('login')
+            ->with('success', 'You have been logged out.');
     }
 }

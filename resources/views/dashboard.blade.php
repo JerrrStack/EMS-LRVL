@@ -7,6 +7,19 @@
         <a href="{{ route('employees.create') }}" class="btn-add">+ Add Employee</a>
     </div>
 
+    <form action="{{ route('employees.index') }}" method="GET" class="search-form">
+        <input
+            type="search"
+            name="search"
+            value="{{ $search ?? '' }}"
+            placeholder="Search by name, email, employee no., or position..."
+        >
+        <button type="submit">Search</button>
+        @if (! empty($search))
+            <a href="{{ route('employees.index') }}" class="search-clear">Clear</a>
+        @endif
+    </form>
+
     <div class="table-wrap">
         <table class="employee-table">
             <thead>
@@ -33,19 +46,28 @@
                             </span>
                         </td>
                         <td class="actions">
-                            <a href="{{ route('employees.edit', ['employee' => $employee->id, 'page' => $employees->currentPage()]) }}" class="btn-link">Edit</a>
+                            <a href="{{ route('employees.edit', array_filter(['employee' => $employee->id, 'page' => $employees->currentPage(), 'search' => $search ?? null])) }}" class="btn-link">Edit</a>
                             <form action="{{ route('employees.destroy', $employee) }}" method="POST" class="inline-form"
                                 onsubmit="return confirm('Delete this employee?');">
                                 @csrf
                                 @method('DELETE')
                                 <input type="hidden" name="page" value="{{ $employees->currentPage() }}">
+                                @if (! empty($search))
+                                    <input type="hidden" name="search" value="{{ $search }}">
+                                @endif
                                 <button type="submit" class="btn-danger">Delete</button>
                             </form>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="empty">No employees found</td>
+                        <td colspan="6" class="empty">
+                            @if (! empty($search))
+                                No employees match "{{ $search }}"
+                            @else
+                                No employees found
+                            @endif
+                        </td>
                     </tr>
                 @endforelse
             </tbody>

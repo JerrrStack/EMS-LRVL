@@ -15,8 +15,24 @@ function passwordToggle() {
     });
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', passwordToggle);
-} else {
+function dismissSuccessAlert() {
+    const alert = document.querySelector('.alert-success');
+
+    if (!alert) return;
+
+    setTimeout(() => {
+        alert.classList.add('is-hidden');
+        setTimeout(() => alert.remove(), 300);
+    }, 4000);
+}
+
+function initApp() {
     passwordToggle();
+    dismissSuccessAlert();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
 }

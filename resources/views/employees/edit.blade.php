@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container container-form">
     <h1 class="page-title">Edit Employee</h1>
 
     @if ($errors->any())
@@ -16,53 +16,62 @@
         @csrf
         @method('PUT')
         <input type="hidden" name="page" value="{{ $currentPage }}">
-        <div class="form-group">
-            <label>First Name</label>
-            <input type="text" name="first_name" value="{{ old('first_name', $employee->first_name) }}">
+        @if (! empty($search))
+            <input type="hidden" name="search" value="{{ $search }}">
+        @endif
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>First Name</label>
+                <input type="text" name="first_name" value="{{ old('first_name', $employee->first_name) }}">
+            </div>
+            <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" name="last_name" value="{{ old('last_name', $employee->last_name) }}">
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Last Name</label>
-            <input type="text" name="last_name" value="{{ old('last_name', $employee->last_name) }}">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" value="{{ old('email', $employee->email) }}">
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="text" name="phone" value="{{ old('phone', $employee->phone) }}">
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" name="email" value="{{ old('email', $employee->email) }}">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Department</label>
+                <select name="department_id">
+                    @foreach ($departments as $department)
+                        <option value="{{ $department->id }}" @selected((int) old('department_id', $employee->department_id) === $department->id)>
+                            {{ $department->department_name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Position</label>
+                <input type="text" name="position" value="{{ old('position', $employee->position) }}">
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Phone</label>
-            <input type="text" name="phone" value="{{ old('phone', $employee->phone) }}">
-        </div>
-
-        <div class="form-group">
-            <label>Department</label>
-            <select name="department_id">
-                @foreach ($departments as $department)
-                    <option value="{{ $department->id }}" @selected((int) old('department_id', $employee->department_id) === $department->id)>
-                        {{ $department->department_name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Position</label>
-            <input type="text" name="position" value="{{ old('position', $employee->position) }}">
-        </div>
-
-        <div class="form-group">
-            <label>Status</label>
-            <select name="status">
-                <option value="active" @selected(old('status', $employee->status) === 'active')>Active</option>
-                <option value="inactive" @selected(old('status', $employee->status) === 'inactive')>Inactive</option>
-            </select>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Status</label>
+                <select name="status">
+                    <option value="active" @selected(old('status', $employee->status) === 'active')>Active</option>
+                    <option value="inactive" @selected(old('status', $employee->status) === 'inactive')>Inactive</option>
+                </select>
+            </div>
         </div>
 
         <button type="submit">Save Changes</button>
     </form>
 
-    <a href="{{ route('employees.index', ['page' => $currentPage]) }}" class="back-link">&larr; Back to list</a>
+    <a href="{{ route('employees.index', array_filter(['page' => $currentPage, 'search' => $search ?? null])) }}" class="back-link">&larr; Back to list</a>
 </div>
 @endsection
