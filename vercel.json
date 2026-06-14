@@ -1,12 +1,18 @@
 {
     "version": 2,
     "framework": null,
-    "installCommand": "echo skip",
-    "functions": {
-        "api/index.php": {
-            "runtime": "vercel-php@0.7.2"
+    "installCommand": "",
+    "buildCommand": "",
+    "builds": [
+        {
+            "src": "/api/index.php",
+            "use": "vercel-php@0.7.2"
+        },
+        {
+            "src": "/public/**",
+            "use": "@vercel/static"
         }
-    },
+    ],
     "routes": [
         {
             "src": "/assets/(.*)",
@@ -21,7 +27,6 @@
             "dest": "/api/index.php"
         }
     ],
-    "outputDirectory": "public",
     "env": {
         "APP_NAME": "EMS",
         "APP_ENV": "production",
