@@ -17,8 +17,9 @@ COPY . .
 
 RUN mkdir -p storage/framework/views storage/framework/cache/data storage/framework/sessions storage/logs bootstrap/cache \
     && composer dump-autoload --optimize \
-    && chmod -R 775 storage bootstrap/cache
+    && chmod -R 775 storage bootstrap/cache \
+    && chmod +x docker-entrypoint.sh
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "mkdir -p storage/framework/views storage/framework/cache/data storage/framework/sessions storage/logs && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"]
+ENTRYPOINT ["./docker-entrypoint.sh"]

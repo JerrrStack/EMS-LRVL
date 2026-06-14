@@ -63,17 +63,20 @@ return [
                     return [];
                 }
 
+                $options = [];
                 $sslCa = env('MYSQL_ATTR_SSL_CA');
 
-                if ($sslCa === null || $sslCa === '') {
-                    return [];
+                if ($sslCa !== null && $sslCa !== '') {
+                    $attribute = class_exists(\Pdo\Mysql::class)
+                        ? \Pdo\Mysql::ATTR_SSL_CA
+                        : PDO::MYSQL_ATTR_SSL_CA;
+
+                    $options[$attribute] = $sslCa;
+                } elseif (filter_var(env('DB_SSL', false), FILTER_VALIDATE_BOOLEAN)) {
+                    $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
                 }
 
-                $attribute = class_exists(\Pdo\Mysql::class)
-                    ? \Pdo\Mysql::ATTR_SSL_CA
-                    : PDO::MYSQL_ATTR_SSL_CA;
-
-                return [$attribute => $sslCa];
+                return $options;
             })(),
         ],
 

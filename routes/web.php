@@ -2,7 +2,22 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmployeeController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/health/db', function () {
+    try {
+        DB::connection()->getPdo();
+        DB::select('SELECT 1');
+
+        return response()->json(['database' => 'connected']);
+    } catch (\Throwable) {
+        return response()->json([
+            'database' => 'failed',
+            'hint' => 'Set cloud MySQL DB_* env vars on Render (127.0.0.1 will not work).',
+        ], 503);
+    }
+});
 
 Route::middleware('guest')->group(function () {
     Route::get('/', [AuthController::class, 'showLogin'])->name('login');
