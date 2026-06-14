@@ -28,6 +28,7 @@
         }
     ],
     "env": {
+        "VERCEL": "1",
         "APP_NAME": "EMS",
         "APP_ENV": "production",
         "APP_DEBUG": "false",

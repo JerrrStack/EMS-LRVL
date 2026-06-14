@@ -12,7 +12,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        if (getenv('VERCEL') || getenv('NOW_REGION')) {
+            $this->app->useStoragePath('/tmp/storage');
+        }
     }
 
     /**
