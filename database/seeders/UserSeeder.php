@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'first.user@gmail.com'],
             [
-                'name' => 'System Administrator',
+                'name' => 'first user',
                 'password' => 'test',
                 'role' => 'admin',
             ]

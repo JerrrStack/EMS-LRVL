@@ -9,6 +9,10 @@ class EmployeeSeeder extends Seeder
 {
     public function run(): void
     {
+        if (Employee::withTrashed()->exists()) {
+            return;
+        }
+
         Employee::insert([
             [
                 'id' => 1,

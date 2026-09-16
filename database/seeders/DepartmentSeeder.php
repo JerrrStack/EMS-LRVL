@@ -9,6 +9,10 @@ class DepartmentSeeder extends Seeder
 {
     public function run(): void
     {
+        if (Department::withTrashed()->exists()) {
+            return;
+        }
+
         Department::insert([
             [
                 'id' => 1,
